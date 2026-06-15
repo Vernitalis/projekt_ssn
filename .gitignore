@@ -1,0 +1,39 @@
+# =========================
+# Środowisko wirtualne
+# =========================
+venv/
+.venv/
+env/
+
+# =========================
+# PyCharm & IDE
+# =========================
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Python Cache
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# =========================
+# Pliki systemowe
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Streamlit
+# =========================
+.streamlit/
+
+# =========================
+# Wagi modeli (Opcjonalne)
+# =========================
+# Uwaga: Odkomentuj poniższą linię, jeśli wagi Twojego modelu 
+# zajmują ponad 50 MB lub nie chcesz ich trzymać na GitHubie.
+# *.pth
