@@ -1,5 +1,6 @@
 import optuna
 import torch
+import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import TimeSeriesSplit
@@ -11,8 +12,6 @@ warnings.filterwarnings('ignore')
 
 from data_loader import fetch_and_prepare_data, prepare_lstm_data
 from model import SP500PredictorLSTM
-# Importujemy naszą mądrą funkcję straty prosto z pliku treningowego!
-from train import DirectionalMSELoss
 
 print("Pobieranie danych (tylko raz dla Optuny)...")
 GLOBAL_DF = fetch_and_prepare_data()
@@ -27,11 +26,10 @@ def objective(trial):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Pobieramy PEŁNE 3 elementy z nowego Data Loadera, korzystając z Configu
-    X_full, y_full, _ = prepare_lstm_data(GLOBAL_DF, sequence_length=config.SEQUENCE_LENGTH)
+    # Pobieramy 4 elementy z nowego Data Loadera
+    X_full, y_full, _, _ = prepare_lstm_data(GLOBAL_DF, sequence_length=config.SEQUENCE_LENGTH)
     INPUT_DIM = X_full.shape[2]
 
-    # Walk-Forward wewnątrz Optuny!
     tscv = TimeSeriesSplit(n_splits=config.FOLDS)
     fold_maes = []
 
@@ -54,10 +52,9 @@ def objective(trial):
             dropout_rate=dropout_rate
         ).to(device)
 
-        criterion = DirectionalMSELoss(penalty_multiplier=config.PENALTY_MULTIPLIER)
+        criterion = nn.MSELoss()
         optimizer = optim.Adam(model.parameters(), lr=lr)
 
-        # Szybki trening (10 epok, żeby 20 prób nie trwało godziny)
         for epoch in range(10):
             model.train()
             for batch_X, batch_y in train_loader:
@@ -68,14 +65,12 @@ def objective(trial):
                 loss.backward()
                 optimizer.step()
 
-        # Walidacja i zbiór MAE
         model.eval()
         with torch.no_grad():
             test_predictions = model(X_test_t.to(device))
             mae = torch.abs(test_predictions - y_test_t.to(device)).mean().item()
             fold_maes.append(mae)
 
-    # Optuna dostaje średnie MAE ze wszystkich okresów rynkowych
     return np.mean(fold_maes)
 
 
@@ -83,7 +78,6 @@ if __name__ == "__main__":
     print("\n--- Rozpoczynam Walk-Forward Optymalizację ---")
     study = optuna.create_study(direction="minimize", study_name="SP500_LSTM_Optimization")
 
-    # 10 prób w zupełności wystarczy na początek
     study.optimize(objective, n_trials=10)
 
     best_trial = study.best_trial

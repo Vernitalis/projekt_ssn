@@ -4,18 +4,15 @@
 
 # --- 1. Ustawienia Danych ---
 SEQUENCE_LENGTH = 60
-INPUT_DIM = 12           # Cechy bazowe + Wskaźniki + TNX + DXY
+INPUT_DIM = 12
 
-# --- 2. Architektura Sieci (Ostatni wynik z Optuny) ---
-HIDDEN_SIZE = 256
-NUM_LAYERS = 2
-DROPOUT_RATE = 0.3618952842568224
+# --- 2. Architektura Sieci ---
+HIDDEN_SIZE = 64
+NUM_LAYERS = 1
+DROPOUT_RATE = 0.13975364373605703
 
 # --- 3. Ustawienia Treningu (Walk-Forward) ---
-LEARNING_RATE = 0.0004813070290170937
-BATCH_SIZE = 32
-EPOCHS_PER_FOLD = 20
+LEARNING_RATE = 0.002486566420414481
+BATCH_SIZE = 16
+EPOCHS_PER_FOLD = 25
 FOLDS = 5
-
-# --- 4. Ustawienia Funkcji Straty ---
-PENALTY_MULTIPLIER = 2.5 # Mnożnik kary za pomyłkę kierunku (Custom Loss)
