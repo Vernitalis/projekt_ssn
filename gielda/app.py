@@ -16,10 +16,7 @@ from model import SP500PredictorLSTM
 
 st.set_page_config(page_title="S&P 500 AI Predictor", layout="wide", page_icon="📈")
 
-st.title("🤖 Deep Learning: S&P 500 Volume Predictor (LSTM)")
-st.markdown(
-    "Wizyta w produkcyjnym panelu testowym. Aplikacja rozszerzona o wykresy diagnostyczne do raportów badawczych.")
-
+st.title("S&P 500 Volume prediction (LSTM)")
 
 @st.cache_data(ttl=3600)
 def load_market_data():
@@ -80,7 +77,7 @@ y_true = recent_300_df['Volume'].values
 y_pred = chart_preds_real
 
 # ==========================================
-# 2. OBLICZANIE METRYK WYMAGANYCH PRZEZ PROJEKT
+# 2. OBLICZANIE METRYK
 # ==========================================
 mae = mean_absolute_error(y_true, y_pred)
 mse = mean_squared_error(y_true, y_pred)
@@ -101,7 +98,7 @@ cm = confusion_matrix(true_class, pred_class, labels=["Spadek", "Wzrost"])
 # ==========================================
 # 3. WIZUALIZACJA GŁÓWNA & BŁĘDY W CZASIE
 # ==========================================
-st.subheader(f"📊 Szereg Czasowy: Model vs Prawdziwy Rynek (Ostatnie {DISPLAY_PERIOD} godzin)")
+st.subheader(f"Szereg czasowy: Model vs Prawdziwy Rynek (Ostatnie {DISPLAY_PERIOD} godzin)")
 fig1 = go.Figure()
 fig1.add_trace(go.Scatter(x=recent_300_df.index, y=y_true, mode='lines', name='Faktyczny Wolumen',
                           line=dict(color='deepskyblue', width=1.2)))
@@ -110,7 +107,7 @@ fig1.add_trace(go.Scatter(x=recent_300_df.index, y=y_pred, mode='lines', name='P
 fig1.update_layout(template="plotly_dark", hovermode="x unified", height=450, margin=dict(l=0, r=0, t=30, b=0))
 st.plotly_chart(fig1, width='stretch')
 
-st.subheader("📉 Rozbieżność w Czasie (Błąd Bezwzględny)")
+st.subheader("Rozbieżność w czasie (Błąd Bezwzględny)")
 fig2 = go.Figure()
 fig2.add_trace(go.Scatter(x=recent_300_df.index, y=np.abs(y_true - y_pred), mode='lines', name='Wartość Błędu',
                           line=dict(color='orange', width=1.0)))
@@ -118,7 +115,7 @@ fig2.update_layout(template="plotly_dark", hovermode="x unified", height=250, ma
 st.plotly_chart(fig2, width='stretch')
 
 # ==========================================
-# 4. NOWE WYKRESY DIAGNOSTYCZNE DO RAPORTU
+# 4. WYKRESY
 # ==========================================
 st.markdown("---")
 st.subheader("Wykresy")
@@ -126,27 +123,26 @@ col_diag1, col_diag2 = st.columns(2)
 
 with col_diag1:
     # Wykres A: Rozkład Błędów (Histogram)
-    st.write("**Rozkład Błędów Resztkowych (Predykcja - Prawda)**")
+    st.write("**Rozkład Błędów(Predykcja - Prawda)**")
     errors = y_pred - y_true
     fig_hist = go.Figure(data=[go.Histogram(x=errors, nbinsx=40, marker_color='mediumpurple')])
     fig_hist.update_layout(template="plotly_dark", height=350, margin=dict(l=0, r=0, t=30, b=0))
     st.plotly_chart(fig_hist, width='stretch')
 
-    st.write("**Macierz Pomyłek Kierunkowych (Wzrost/Spadek)**")
+    st.write("**Macierz Pomyłek (Wzrost/Spadek)**")
 
     fig_cm, ax = plt.subplots(figsize=(5, 4))
 
     fig_cm.patch.set_alpha(0.0)
     ax.patch.set_alpha(0.0)
 
-    # Rysujemy macierz (cmap='Blues' z biblioteki matplotlib)
+    # Wykres B: macierz pomyłek
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
                 xticklabels=["Spadek", "Wzrost"],
                 yticklabels=["Spadek", "Wzrost"],
                 cbar=False, ax=ax,
-                annot_kws={"size": 16})  # Wielkość tekstu w kafelkach
+                annot_kws={"size": 16})
 
-    # Ustawiamy neutralny, szary kolor tekstów osi, który wygląda dobrze i w nocy, i w dzień
     ax.set_xlabel('Predykcja', color='gray')
     ax.set_ylabel('Prawda', color='gray')
     ax.tick_params(colors='gray')
@@ -156,7 +152,7 @@ with col_diag1:
 
 with col_diag2:
     # Wykres C: Rzeczywiste vs Przewidywane (Scatter Plot)
-    st.write("**Zależność Prawda vs Predykcja (Idealnie: Linia ukośna)**")
+    st.write("**Zależność Prawda vs Predykcja**")
     min_val, max_val = min(y_true.min(), y_pred.min()), max(y_true.max(), y_pred.max())
 
     fig_scatter = go.Figure()

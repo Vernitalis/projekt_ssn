@@ -22,7 +22,6 @@ class EnergyPredictorLSTM(nn.Module):
         self.dropout = nn.Dropout(dropout_rate)
 
         # Warstwa wyjściowa (Linear).
-        # Zauważ brak jakiejkolwiek funkcji aktywacji (Sigmoid/Tanh) pod nią!
         self.fc = nn.Linear(hidden_size, 1)
 
     def forward(self, x):

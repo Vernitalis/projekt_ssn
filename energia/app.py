@@ -25,9 +25,9 @@ from model import EnergyPredictorLSTM
 # ==========================================
 st.set_page_config(page_title="Smart Home Energy Predictor", layout="wide", page_icon="⚡")
 
-st.title("⚡ AI Smart Home: Energy Demand Predictor")
+st.title("Smart home energy demand prediction")
 st.markdown(
-    "Produkcyjny panel telemetryczny systemu prognozowania obciążenia sieci energetycznej budynku (Model **Multivariate LSTM**)."
+    "panel telemetryczny prognozowania obciążenia sieci energetycznej budynku."
 )
 
 
@@ -45,7 +45,7 @@ with st.spinner("Pobieranie strumienia danych z czujników UCI IoT..."):
 # ==========================================
 # 3. Wykres historycznego zużycia na bieżąco
 # ==========================================
-st.subheader("📊 Monitor zużycia energii elektrycznej (Ostatnie 150 pomiarów)")
+st.subheader("zużycie energii elektrycznej (Ostatnie 150 pomiarów)")
 recent_df = df.tail(150)
 
 # Odtwarzamy realne wartości do wyświetlenia na osi Y wykresu
@@ -65,7 +65,7 @@ st.plotly_chart(fig, use_container_width=True)
 # ==========================================
 # 4. System Wnioskowania (Na Żywo)
 # ==========================================
-st.subheader("🔮 System Prognozowania Obciążenia Lokalu (T+1)")
+st.subheader("Prognozowanie obciążenia lokalu")
 
 # Przygotowanie wektora wejściowego z ostatnich 'SEQUENCE_LENGTH' wierszy
 last_window = df.values[-config.SEQUENCE_LENGTH:]
@@ -112,11 +112,11 @@ try:
 
     with col3:
         if predicted_wh > 250:
-            st.error("Status: WYSOKIE OBCIĄŻENIE 🚨 (Ryzyko szczytu poboru)")
+            st.error("Status: WYSOKIE OBCIĄŻENIE")
         elif predicted_wh > 90:
-            st.warning("Status: ŚREDNIE OBCIĄŻENIE ⚠️")
+            st.warning("Status: ŚREDNIE OBCIĄŻENIE️")
         else:
-            st.success("Status: OPTYMALNY POBÓR ✅")
+            st.success("Status: OPTYMALNY POBÓR")
 
 except FileNotFoundError:
     st.error("BŁĄD: Nie znaleziono pliku wag 'iot_lstm_weights.pth'. Uruchom najpierw trening z pliku train.py.")
@@ -128,7 +128,7 @@ st.caption("Panel telemetryczny zasilany asymetryczną funkcją straty odporną 
 # 5. Zaawansowana Diagnostyka i Wykresy (Generowanie dla Prezentacji)
 # ==========================================
 st.markdown("---")
-st.subheader("🔬 Zaawansowana Diagnostyka Modelu (Ewaluacja Historyczna)")
+st.subheader("Diagnostyka modelu")
 
 with st.spinner("Przetwarzanie danych historycznych do analizy statystycznej..."):
     # Bierzemy 1000 ostatnich rekordów do weryfikacji metryk w aplikacji

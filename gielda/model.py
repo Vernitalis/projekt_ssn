@@ -37,7 +37,7 @@ class SP500PredictorLSTM(nn.Module):
         # out ma kształt: (batch_size, sequence_length, hidden_size)
         out, _ = self.lstm(x, (h0, c0))
 
-        # WAŻNE: Interesuje nas tylko predykcja z ostatniego dnia sekwencji.
+        # Interesuje nas tylko predykcja z ostatniego dnia sekwencji.
         # Pobieramy ostatni element z drugiego wymiaru (sequence_length)
         out = out[:, -1, :]
 

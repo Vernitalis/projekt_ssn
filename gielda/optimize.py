@@ -26,7 +26,7 @@ def objective(trial):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Pobieramy 4 elementy z nowego Data Loadera
+    # Pobieramy 4 elementy z Data Loadera
     X_full, y_full, _, _ = prepare_lstm_data(GLOBAL_DF, sequence_length=config.SEQUENCE_LENGTH)
     INPUT_DIM = X_full.shape[2]
 

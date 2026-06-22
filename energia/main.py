@@ -5,7 +5,7 @@ import time
 
 def print_header():
     print("\n" + "=" * 60)
-    print("🚀 QUANTITATIVE FINANCE ML PIPELINE (S&P 500)")
+    print("ENERGY CONSUMPTION ML PIPELINE (UCI Appliance)")
     print("=" * 60)
 
 
@@ -36,11 +36,11 @@ def main_menu():
     while True:
         print_header()
         print("Wybierz moduł do uruchomienia:")
-        print("  1. 🧠 PEŁNY PIPELINE (Trening Walk-Forward -> Start Dashboardu)")
-        print("  2. 🔬 Optymalizacja Modelu (Optuna)")
-        print("  3. 🏋️ Tylko Trening Modelu (Zapisanie nowych wag)")
-        print("  4. 📊 Tylko Dashboard (Wnioskowanie na żywo)")
-        print("  0. ❌ Wyjście")
+        print("  1. PEŁNY PIPELINE (Trening Walk-Forward -> Start Dashboardu)")
+        print("  2. Optymalizacja Modelu (Optuna)")
+        print("  3. Tylko Trening Modelu (Zapisanie nowych wag)")
+        print("  4. Tylko Dashboard (Wnioskowanie na żywo)")
+        print("  0. Wyjście")
         print("-" * 60)
 
         choice = input("Twój wybór (0-4): ").strip()
@@ -50,7 +50,7 @@ def main_menu():
                 run_training()
                 run_dashboard()
             except Exception as e:
-                print(f"\n❌ Błąd podczas wykonywania pipeline'u: {e}")
+                print(f"\nBłąd podczas wykonywania pipeline'u: {e}")
         elif choice == '2':
             run_optimization()
         elif choice == '3':
@@ -61,7 +61,7 @@ def main_menu():
             print("\nZamykanie systemu. Do zobaczenia!")
             sys.exit(0)
         else:
-            print("\n⚠️ Nieprawidłowy wybór. Wpisz cyfrę od 0 do 4.")
+            print("\nNieprawidłowy wybór. Wpisz cyfrę od 0 do 4.")
 
 
 if __name__ == "__main__":

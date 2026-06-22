@@ -72,7 +72,7 @@ def prepare_lstm_data(df, sequence_length=60):
     ]
 
     data_features = df[features].values
-    data_targets = df[['Volume']].values  # Bezpośrednio wolumen, bez shift!
+    data_targets = df[['Volume']].values
 
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaled_features = scaler.fit_transform(data_features)

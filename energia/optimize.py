@@ -91,7 +91,7 @@ if __name__ == "__main__":
     print("\n--- Rozpoczynam Optyalizację IoT Walk-Forward ---")
     study = optuna.create_study(direction="minimize", study_name="IoT_LSTM_Optimization")
 
-    # Wykonujemy 10 prób (możesz zwiększyć do 30-50, jeśli masz więcej czasu)
+    # Wykonujemy 10 prób
     study.optimize(objective, n_trials=10)
 
     best_trial = study.best_trial
